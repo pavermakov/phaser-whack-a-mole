@@ -7,6 +7,7 @@ var phaserModule = path.join(__dirname, '/node_modules/phaser/');
 var phaser = path.join(phaserModule, 'build/custom/phaser-split.js');
 var pixi = path.join(phaserModule, 'build/custom/pixi.js');
 var p2 = path.join(phaserModule, 'build/custom/p2.js');
+var phaserCapture = path.join(__dirname, '/node_modules/phaser-capture/phaser-capture.js');
 
 var definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
@@ -18,26 +19,29 @@ module.exports = {
       'babel-polyfill',
       path.resolve(__dirname, 'src/main.js'),
     ],
-    vendor: ['pixi', 'p2', 'phaser'],
+    vendor: ['pixi', 'p2', 'phaser', 'webfontloader'],
   },
   devtool: 'cheap-source-map',
   output: {
     pathinfo: true,
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: './dist/',
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, 'scripts'),
+    publicPath: './scripts/',
+    filename: 'app.bundle.js'
   },
   watch: true,
   plugins: [
     definePlugin,
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.bundle.js'
+    }),
     new BrowserSyncPlugin({
       host: process.env.IP || 'localhost',
       port: process.env.PORT || 3000,
       server: {
         baseDir: ['./', './build']
       }
-    })
+    }),
   ],
   module: {
     rules: [
@@ -56,7 +60,8 @@ module.exports = {
     alias: {
       'phaser': phaser,
       'pixi': pixi,
-      'p2': p2
+      'p2': p2,
+      'phaser-capture': phaserCapture,
     }
   }
 }

@@ -6,7 +6,6 @@ import Mole from '../components/Mole';
 export default class extends Phaser.State {
   init() {
     this._score = 0;
-    this._surfaceTime = 2000;
     this._level = 1;
   }
 
@@ -16,8 +15,6 @@ export default class extends Phaser.State {
 
     this.holes = this._initHoles();
     this.moles = this._initMoles();
-
-    // this.add.tween(this.moles.getAt(0)).to({ y: '-50'}, 300, Phaser.Easing.Bounce.Out, true);
   }
 
   _initHoles() {
@@ -66,5 +63,9 @@ export default class extends Phaser.State {
     }, this);
 
     return moles;
+  }
+
+  _increaseScore() {
+    this._score += 1;
   }
 }

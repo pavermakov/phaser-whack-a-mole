@@ -1,15 +1,20 @@
-var path = require('path')
-var webpack = require('webpack')
+var path = require('path');
+var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var JavaScriptObfuscator = require('webpack-obfuscator');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var WebpackChunkHash = require("webpack-chunk-hash");
 
 // Phaser webpack config
-var phaserModule = path.join(__dirname, '/node_modules/phaser/')
-var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-var pixi = path.join(phaserModule, 'build/custom/pixi.js')
-var p2 = path.join(phaserModule, 'build/custom/p2.js')
+var phaserModule = path.join(__dirname, '/node_modules/phaser/');
+var phaser = path.join(phaserModule, 'build/custom/phaser-split.js');
+var pixi = path.join(phaserModule, 'build/custom/pixi.js');
+var p2 = path.join(phaserModule, 'build/custom/p2.js');
+var phaserCapture = path.join(__dirname, '/node_modules/phaser-capture/phaser-capture.js');
 
 var definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false'))
-})
+});
 
 module.exports = {
   entry: {
@@ -17,13 +22,13 @@ module.exports = {
       'babel-polyfill',
       path.resolve(__dirname, 'src/main.js')
     ],
-    vendor: ['pixi', 'p2', 'phaser']
+    vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
 
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './dist/',
-    filename: 'bundle.js'
+    publicPath: '',
+    filename: 'scripts/[name].[chunkhash].js'
   },
   plugins: [
     definePlugin,
@@ -35,7 +40,29 @@ module.exports = {
         comments: false
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'scripts/vendor.[chunkhash].js'
+    }),
+    new JavaScriptObfuscator({ rotateUnicodeArray: true }, ['bundle.js']),
+    new CopyWebpackPlugin([
+      {
+        from: {
+          glob: './index.html',
+        },
+      },
+      {
+        from: './assets',
+        to: './assets'
+      },
+    ]),
+    new HtmlWebpackPlugin({
+      filename: '../index.html',
+      template: 'template.html',
+      inject: true,
+      chunksSortMode: 'dependency'
+    }),
+    new WebpackChunkHash(),
   ],
   module: {
     rules: [
@@ -54,7 +81,8 @@ module.exports = {
     alias: {
       'phaser': phaser,
       'pixi': pixi,
-      'p2': p2
+      'p2': p2,
+      'phaser-capture': phaserCapture,
     }
   }
 }

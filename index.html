@@ -10,18 +10,41 @@
   <meta http-equiv="cleartype" content="on">
 
   <style>
+    * {
+      -webkit-touch-callout: none;
+      -webkit-text-size-adjust: none;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      -webkit-user-select: none;
+      user-select: none;
+    }
     html,
     body {
-      margin: 0;
-      padding: 0;
+        margin: 0;
+        padding: 0;
+    }
+    canvas {
+      transform: translate3d(0, 0, 0);
+      -webkit-transform: translate3d(0, 0, 0);
+      image-rendering: optimizeSpeed;             /* Legal fallback */
+      image-rendering: -moz-crisp-edges;          /* Firefox        */
+      image-rendering: -o-crisp-edges;            /* Opera          */
+      image-rendering: -webkit-optimize-contrast; /* Webkit         */
+      image-rendering: optimize-contrast;         /* CSS3 Proposed  */
+      image-rendering: crisp-edges;               /* CSS4 Proposed  */
+      image-rendering: pixelated;                 /* CSS4 Proposed  */
+      -ms-interpolation-mode: nearest-neighbor;   /* IE8+           */
+    }
+    @font-face {
+      font-family: 'ProximaNova';
+      src: url("assets/fonts/2F537A_7_0.woff") format("woff");
     }
   </style>
 </head>
 
 <body>
   <div id="content"></div>
-  <script src="dist/vendor.bundle.js"></script>
-  <script src="dist/bundle.js"></script>
+  <script src="scripts/vendor.bundle.js"></script>
+  <script src="scripts/app.bundle.js"></script>
 </body>
 
 </html>
