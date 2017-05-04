@@ -20,6 +20,8 @@ export default class extends Phaser.State {
     this.load.image('grass', `${this._imagePath}grass.png`);
     this.load.image('hole', `${this._imagePath}hole.png`);
     this.load.image('mole', `${this._imagePath}mole.png`);
+    this.load.image('hammer', `${this._imagePath}hammer.png`);
+    this.load.image('life', `${this._imagePath}life.png`);
 
     // загрузка шрифтов
     // WebFont.load({
