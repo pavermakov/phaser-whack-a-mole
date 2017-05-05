@@ -30,6 +30,7 @@ export default class extends Phaser.Group {
   _popLifeIcon() {
     // give name to the group, simplify
     if (this.children[0].length > 0) {
+      console.log('pop icon');
       this.children[0].getChildAt(2).scale.setTo(2);
     }
   }

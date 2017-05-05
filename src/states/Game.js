@@ -33,14 +33,16 @@ export default class extends Phaser.State {
 
   _start() {
     this._scheduleNextLevelUp();
-
     this.moles.forEach(mole =>  mole._scheduleNextMove(), this);
   }
 
   _levelUp() {
     console.log('level up');
     this._maxMolesNum += 1;
-    this._nextLevelUpTime *= 1.5;
+    this._nextLevelUpTime *= 2.5;
+    this._spawnTimeRange.min -= 50;
+    this._spawnTimeRange.max -= 50;
+
     this._scheduleNextLevelUp();
   }
 

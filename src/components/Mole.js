@@ -52,6 +52,7 @@ export default class extends Phaser.Sprite {
       if (this.game._activeMolesNum >= this.game._maxMolesNum) {
         this.data.timerEvent = this.data.timer.add(delay, this._scheduleNextMove, this);
       } else {
+        // this part is called initially
         this.game._increaseActiveMoles();
         this.data.timerEvent = this.data.timer.add(delay, this._toggleMole, this);  
       }
@@ -68,14 +69,13 @@ export default class extends Phaser.Sprite {
 
     if (this.data.isBelow) {
       // getting out of hole
-      location = this.data.location.above;
-      easing = Phaser.Easing.Bounce.Out;
-      timing = 300;
-      callback = this._scheduleNextMove;
-
       this.data.isBelow = false;
       this.inputEnabled = true;
       
+      location = this.data.location.above;
+      easing = Phaser.Easing.Bounce.Out;
+      timing = 300;
+      callback = this._scheduleNextMove; // add callback to it
     } else if(!this.data.isBelow && !this.data.whacked) {
       // player failed, flying over the screen (or something)
       location = this.data.location.over;
@@ -114,6 +114,7 @@ export default class extends Phaser.Sprite {
   }
 
   _whack() {
+    console.log(this.data.isBelow);
     if(this.data.isBelow || this.data.whacked) return;
 
     this.data.whacked = true;
